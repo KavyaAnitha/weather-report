@@ -1,5 +1,12 @@
 from flask import Flask, render_template, request, flash
-from weather_service import WeatherService, WeatherServiceError, LocationNotFoundError, APIError, NetworkError
+from weather_service import (
+    WeatherService,
+    WeatherServiceError,
+    LocationNotFoundError,
+    APIError,
+    NetworkError,
+    OfflineError,
+)
 
 app = Flask(__name__)
 app.secret_key = 'your-secret-key-here'  # Simple key for demo purposes
@@ -26,6 +33,9 @@ def index():
         except LocationNotFoundError as e:
             error = str(e)
         except APIError as e:
+            error = str(e)
+        except OfflineError as e:
+            # No internet connection - show a clear, friendly message.
             error = str(e)
         except NetworkError as e:
             error = str(e)

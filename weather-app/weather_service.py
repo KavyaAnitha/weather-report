@@ -22,6 +22,17 @@ class NetworkError(WeatherServiceError):
     pass
 
 
+class OfflineError(NetworkError):
+    """
+    Raised specifically when the internet is unavailable (no connection
+    could be made to the weather API).
+
+    It inherits from NetworkError, so existing code that catches
+    NetworkError still works.
+    """
+    pass
+
+
 class WeatherService:
     """
     Weather service using Open-Meteo API (free, no API key required).
@@ -29,6 +40,27 @@ class WeatherService:
     
     GEOCODE_BASE_URL = "https://geocoding-api.open-meteo.com/v1/search"
     WEATHER_BASE_URL = "https://api.open-meteo.com/v1/forecast"
+
+    @staticmethod
+    def _network_error(exc: Exception) -> NetworkError:
+        """
+        Convert a low-level requests exception into a friendly NetworkError.
+
+        This is what lets the app show a clear, human-readable message when
+        the internet is unavailable instead of a technical traceback.
+        """
+        if isinstance(exc, requests.exceptions.Timeout):
+            return NetworkError(
+                "The weather service took too long to respond. "
+                "Please check your internet connection and try again."
+            )
+        if isinstance(exc, requests.exceptions.ConnectionError):
+            return OfflineError(
+                "No internet connection. Please connect to the internet and try again."
+            )
+        return NetworkError(
+            "A network error occurred. Please check your internet connection and try again."
+        )
     
     def get_coordinates(self, city_name: str) -> Tuple[float, float, str]:
         """
@@ -84,14 +116,10 @@ class WeatherService:
             
             return lat, lon, full_location
             
-        except requests.exceptions.Timeout:
-            raise NetworkError("Request timed out. Please check your internet connection.")
-        except requests.exceptions.ConnectionError:
-            raise NetworkError("Connection error. Please check your internet connection.")
         except requests.exceptions.HTTPError:
             raise APIError("Geocoding API error. Please try again later.")
-        except requests.exceptions.RequestException:
-            raise NetworkError("Network error occurred. Please try again.")
+        except requests.exceptions.RequestException as e:
+            raise self._network_error(e)
         except (KeyError, IndexError, ValueError):
             raise APIError("Invalid response from geocoding API.")
     
@@ -132,14 +160,10 @@ class WeatherService:
             
             return data
             
-        except requests.exceptions.Timeout:
-            raise NetworkError("Request timed out. Please check your internet connection.")
-        except requests.exceptions.ConnectionError:
-            raise NetworkError("Connection error. Please check your internet connection.")
         except requests.exceptions.HTTPError:
             raise APIError("Weather API error. Please try again later.")
-        except requests.exceptions.RequestException:
-            raise NetworkError("Network error occurred. Please try again.")
+        except requests.exceptions.RequestException as e:
+            raise self._network_error(e)
         except (KeyError, ValueError):
             raise APIError("Invalid response from weather API.")
     
