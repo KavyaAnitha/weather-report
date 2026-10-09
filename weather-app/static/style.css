@@ -1,0 +1,160 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+    background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+    min-height: 100vh;
+    padding: 20px;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+    text-align: center;
+    color: #2d3436;
+    margin-bottom: 30px;
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.search-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.search-form input {
+    flex: 1;
+    min-width: 200px;
+    padding: 12px 15px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-family: inherit;
+}
+
+.search-form input:focus {
+    outline: none;
+    border-color: #0984e3;
+}
+
+.search-form button {
+    padding: 12px 25px;
+    font-size: 16px;
+    background: #0984e3;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.3s ease;
+    font-family: inherit;
+}
+
+.search-form button:hover {
+    background: #0769c0;
+}
+
+.search-form button:active {
+    transform: scale(0.98);
+}
+
+.error-message {
+    background: #ffeaa7;
+    color: #2d3436;
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border-left: 4px solid #fdcb6e;
+    font-weight: 500;
+}
+
+.weather-card {
+    background: #f8f9fa;
+    padding: 25px;
+    border-radius: 10px;
+    border: 2px solid #e0e0e0;
+}
+
+.weather-card h2 {
+    color: #2d3436;
+    margin-bottom: 20px;
+    font-size: 22px;
+    text-align: center;
+    word-break: break-word;
+}
+
+.weather-info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background: white;
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.label {
+    font-weight: 600;
+    color: #2d3436;
+    flex: 1;
+    min-width: 120px;
+}
+
+.value {
+    color: #636e72;
+    text-align: right;
+    flex: 1;
+    min-width: 120px;
+    word-break: break-word;
+}
+
+@media (max-width: 600px) {
+    .container {
+        margin: 20px auto;
+        padding: 20px;
+    }
+    
+    h1 {
+        font-size: 24px;
+    }
+    
+    .search-form {
+        flex-direction: column;
+    }
+    
+    .search-form input,
+    .search-form button {
+        width: 100%;
+    }
+    
+    .info-item {
+        flex-direction: column;
+    }
+    
+    .value {
+        text-align: left;
+    }
+}
